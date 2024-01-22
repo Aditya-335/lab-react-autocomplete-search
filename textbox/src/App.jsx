@@ -10,18 +10,27 @@ export default function SearchBox() {
     const value = event.target.value;
     setSearchTerm(value);
 
-    // Filter suggestions based on the input value
-    const filteredSuggestions = PlaceData.filter((country) =>
-      country.name.toLowerCase().includes(value.toLowerCase())
-    );
+    // Reset suggestions and show dropdown when input is not empty
+    if (value.trim() !== '') {
+      setShowSuggestions(true);
 
-    // Update the suggestions state
-    setSuggestions(filteredSuggestions);
+      // Filter suggestions based on the input value
+      const filteredSuggestions = PlaceData.filter((country) =>
+        country.name.toLowerCase().includes(value.toLowerCase())
+      );
+
+      // Update the suggestions state
+      setSuggestions(filteredSuggestions);
+    } else {
+      // Reset suggestions and hide dropdown when input is empty
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
   };
 
   const handleSearch = () => {
     // Implement the logic to perform the search with the selected suggestion or the entered term
-    console.log('Escape', searchTerm);
+    console.log('Search', searchTerm);
   };
 
   const handleKeyDown = (event) => {
@@ -39,7 +48,7 @@ export default function SearchBox() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []); // Empty dependency array ensures that this effect runs only once on mount
+  }, []);
 
   return (
     <div>
